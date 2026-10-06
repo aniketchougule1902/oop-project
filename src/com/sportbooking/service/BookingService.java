@@ -106,6 +106,12 @@ public class BookingService {
 
     public List<Integer> getAvailableStartHours(String facilityId, LocalDate date, int durationHours) {
         findFacility(facilityId);
+        if (date.isBefore(LocalDate.now())) {
+            throw new IllegalArgumentException("Booking date cannot be in the past.");
+        }
+        if (durationHours < 1 || durationHours > 4) {
+            throw new IllegalArgumentException("Duration must be between 1 and 4 hours.");
+        }
         List<Integer> slots = new ArrayList<>();
         for (int hour = 6; hour + durationHours <= 23; hour++) {
             if (isSlotAvailable(facilityId, date, hour, durationHours)) {
