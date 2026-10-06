@@ -1,8 +1,9 @@
 out/
-bin/
-target/
-.idea/
-*.iml
-.vscode/
+out-test/
+build/
 data/
 *.class
+*.jar
+.idea/
+.vscode/
+*.iml

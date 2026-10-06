@@ -1,6 +1,8 @@
 package com.sportbooking.payment;
 
+import com.sportbooking.model.PaymentTransaction;
+
 public interface PaymentMethod {
-    String pay(double amount);
+    PaymentTransaction process(double amount);
     String getMethodName();
 }

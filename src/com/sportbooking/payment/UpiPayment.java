@@ -1,5 +1,7 @@
 package com.sportbooking.payment;
 
+import com.sportbooking.model.PaymentTransaction;
+
 import java.util.UUID;
 
 public class UpiPayment implements PaymentMethod {
@@ -13,12 +15,16 @@ public class UpiPayment implements PaymentMethod {
     }
 
     @Override
-    public String pay(double amount) {
-        return "UPI-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
+    public PaymentTransaction process(double amount) {
+        return new PaymentTransaction("UPI-" + shortId(), getMethodName(), amount);
     }
 
     @Override
     public String getMethodName() {
         return "UPI (" + upiId + ")";
+    }
+
+    private String shortId() {
+        return UUID.randomUUID().toString().substring(0, 8).toUpperCase();
     }
 }

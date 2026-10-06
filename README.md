@@ -1,183 +1,228 @@
-# Sports Court & Turf Booking System (Java OOP Mini Project)
+# Sports Court & Turf Booking System
 
-A console-based **Sports Court and Turf Booking System** developed in Java for an Object Oriented Programming mini project. The system models a real-world booking workflow where customers can explore sports facilities, check availability, reserve courts/turfs, make a simulated payment, cancel bookings, and export a booking report.
-
-## Objective
-
-The project demonstrates how Object Oriented Programming concepts can be applied to a real-world problem. It is intentionally dependency-free so it can be compiled with a normal JDK and demonstrated easily in a college lab or viva.
+A complete **Java 17 Object Oriented Programming mini project** for managing sports court and turf bookings. It is dependency-free, menu-driven, persists data between runs, includes customer/admin flows, and is designed to be easy to demonstrate in a college practical or viva.
 
 ## Features
 
-- View all available courts and turfs
-- Search facilities by sport
-- Register customers
+### Customer
+- Register customer accounts
+- STANDARD / SILVER / GOLD membership levels
+- Browse and search courts/turfs by sport and location
 - Check date-wise available time slots
-- Book a court/turf for a selected sport and duration
-- Prevent overlapping bookings for the same facility
-- Simulated Cash and UPI payments
-- Reward points for customers
-- View and cancel bookings
-- Admin option to add a new court or turf
-- Export bookings to `data/bookings.txt`
-- Input validation and custom exception handling
+- Book a facility for 1–4 hours
+- Automatic overlap/double-booking prevention
+- Simulated Cash, UPI, and Card payments
+- Membership discounts and reward points
+- View personal bookings
+- Cancel future bookings with simulated refund status
+- Export a text payment receipt
+
+### Admin
+- PIN-protected admin menu (`1234` for this academic demo)
+- Dashboard with facilities, customers, booking counts, and revenue
+- Add Court or Turf facilities
+- Configure supported sports and operating hours
+- Set facility status: `ACTIVE`, `MAINTENANCE`, `INACTIVE`
+- View all customers and bookings
+- Export bookings as CSV
+
+### Technical
+- Persistent local data using Java object serialization
+- CSV report generation
+- Text receipt generation
+- Custom exceptions and input validation
+- Dependency-free self-test
+- Build/run scripts for Windows and Linux/macOS
+- Mermaid class diagram in `docs/CLASS_DIAGRAM.md`
 
 ## OOP Concepts Used
 
-| OOP concept | Where it is used |
-| --- | --- |
-| Classes & Objects | `Booking`, `Customer`, `Court`, `Turf`, etc. |
-| Encapsulation | Private fields with controlled getters/setters |
+| Concept | Implementation |
+|---|---|
+| Classes & Objects | `Booking`, `Customer`, `Court`, `Turf`, `PaymentTransaction` |
+| Encapsulation | Private fields + validated methods/getters/setters |
 | Inheritance | `Customer`/`Admin` extend `User`; `Court`/`Turf` extend `SportsFacility` |
-| Abstraction | Abstract classes `User` and `SportsFacility` |
-| Polymorphism | `SportsFacility` references work with both `Court` and `Turf` objects |
-| Interface | `PaymentMethod` implemented by `CashPayment` and `UpiPayment` |
-| Method Overriding | Facility type/details, user roles, payment behavior |
-| Association / Composition | A `Booking` contains a `Customer` and a `SportsFacility` |
-| Collections | `List`, `Set`, `EnumSet` used for application data |
-| Exception Handling | Custom booking exceptions + validation errors |
-| Enums | Sports and booking states |
-| File Handling | Booking report export using Java NIO |
-
-## Project Structure
-
-```text
-oop-project/
-├── README.md
-├── .gitignore
-└── src/
-    └── com/
-        └── sportbooking/
-            ├── app/
-            │   ├── Main.java
-            │   └── ConsoleApplication.java
-            ├── exception/
-            │   ├── BookingException.java
-            │   ├── NotFoundException.java
-            │   └── SlotUnavailableException.java
-            ├── model/
-            │   ├── Admin.java
-            │   ├── Booking.java
-            │   ├── BookingStatus.java
-            │   ├── Court.java
-            │   ├── Customer.java
-            │   ├── SportsFacility.java
-            │   ├── SportType.java
-            │   ├── Turf.java
-            │   └── User.java
-            ├── payment/
-            │   ├── CashPayment.java
-            │   ├── PaymentMethod.java
-            │   └── UpiPayment.java
-            ├── service/
-            │   └── BookingService.java
-            └── util/
-                └── DataExporter.java
-```
+| Abstraction | Abstract `User` and `SportsFacility` classes |
+| Polymorphism | Court/Turf runtime behavior through `SportsFacility`; payment implementations through `PaymentMethod` |
+| Interface | `PaymentMethod` |
+| Overriding | Role, facility type/details, surcharge calculation |
+| Overloading | `searchFacilities(sport)` and `searchFacilities(sport, location)` |
+| Association/Composition | `Booking` connects Customer + Facility and contains PaymentTransaction |
+| Exceptions | Custom booking/facility/slot exceptions |
+| Collections | `List`, `Set`, `EnumSet` |
+| Enums | Sports, membership, booking/payment/facility statuses |
+| File Handling | Persistent serialized state, CSV reports, text receipts |
 
 ## Requirements
 
-- **JDK 17 or newer** recommended
-- No database or third-party library is required
+- **JDK 17 or newer**
+- No Maven, Gradle, database, or third-party library is required.
 
-Check Java installation:
+Check Java:
 
 ```bash
 java -version
 javac -version
 ```
 
-## How to Run
+## Run on Windows
 
-### Option 1: Windows Command Prompt / PowerShell
+### Easiest method
 
-Clone the repository and enter the project folder:
+```bat
+git clone https://github.com/aniketchougule1902/oop-project.git
+cd oop-project
+run.bat
+```
+
+`run.bat` automatically builds the project the first time.
+
+### Build only
+
+```bat
+build.bat
+```
+
+Generated runnable JAR:
+
+```text
+build\sports-booking.jar
+```
+
+Run the JAR directly:
+
+```bat
+java -jar build\sports-booking.jar
+```
+
+### Run self-test
+
+```bat
+test.bat
+```
+
+A successful test ends with:
+
+```text
+ALL SELF-TESTS PASSED
+```
+
+## Run on Git Bash / Linux / macOS
 
 ```bash
 git clone https://github.com/aniketchougule1902/oop-project.git
 cd oop-project
+chmod +x build.sh run.sh test.sh
+./run.sh
 ```
 
-Create the output folder and compile all Java files:
+Test:
+
+```bash
+./test.sh
+```
+
+## Run manually with `javac`
+
+### Linux/macOS/Git Bash
+
+```bash
+mkdir -p out
+javac --release 17 -d out $(find src -name "*.java")
+java -cp out com.sportbooking.app.Main
+```
+
+### PowerShell
 
 ```powershell
 New-Item -ItemType Directory -Force out | Out-Null
-javac -d out (Get-ChildItem -Recurse -Filter *.java src | ForEach-Object FullName)
-```
-
-Run the application:
-
-```bash
+javac --release 17 -d out (Get-ChildItem -Recurse -Filter *.java src | ForEach-Object FullName)
 java -cp out com.sportbooking.app.Main
 ```
 
-### Option 2: Windows Git Bash / Linux / macOS
+## Demo Credentials / Data
 
-```bash
-git clone https://github.com/aniketchougule1902/oop-project.git
-cd oop-project
-mkdir -p out
-javac -d out $(find src -name "*.java")
-java -cp out com.sportbooking.app.Main
-```
-
-### Option 3: IntelliJ IDEA / Eclipse / VS Code
-
-1. Clone or download this repository.
-2. Open the `oop-project` folder in your IDE.
-3. Configure a JDK (17+ recommended).
-4. Mark `src` as the source root if the IDE does not detect it automatically.
-5. Open `src/com/sportbooking/app/Main.java`.
-6. Run the `Main` class.
-
-## Main Menu
+The first run automatically creates sample facilities and customers.
 
 ```text
-1. View all courts and turfs
-2. Search facilities by sport
-3. Register customer
-4. Check available time slots
-5. Book a court/turf
-6. View all bookings
-7. Cancel booking
-8. Admin: Add court/turf
-9. Export booking report
-0. Exit
+Demo Customer ID : C1001
+Admin PIN         : 1234
 ```
 
-A demo customer and four sample facilities are automatically loaded when the program starts, so the project can be demonstrated immediately.
+Payments in this project are **simulated only**. Never enter a real card number or real payment credential; use dummy values for demonstration.
 
-Demo customer:
+## Typical Demo Flow
+
+1. Run the application.
+2. Choose **Browse all courts and turfs**.
+3. Open **Customer portal**.
+4. Use customer `C1001` or register a new one.
+5. Check available slots for a future/current date.
+6. Book a facility and choose a simulated payment method.
+7. Observe booking ID, payment transaction, reward points, and generated receipt.
+8. Try booking an overlapping slot to demonstrate conflict prevention.
+9. Enter **Admin portal** with PIN `1234` to show the dashboard and CSV export.
+
+## Persistence and Generated Files
+
+Runtime data is stored under `data/`:
 
 ```text
-Customer ID: C1001
-Phone: 9876543210
+data/
+├── booking-system.ser
+├── receipts/
+│   └── receipt-Bxxxx.txt
+└── reports/
+    └── bookings.csv
 ```
 
-## Example Booking Flow
+Delete the `data/` folder only when you intentionally want to reset local demo data.
 
-1. Choose **1** to see facility IDs.
-2. Choose **4** to check available slots for a facility and date.
-3. Choose **5** to create a booking.
-4. Select the demo customer `C1001` or register a new customer.
-5. Enter a facility ID such as `F201`.
-6. Select a supported sport such as `FOOTBALL`.
-7. Enter a future/current date, duration, and start hour.
-8. Choose Cash or UPI payment.
-9. The system creates a booking ID such as `B5001` and prevents conflicting bookings.
+## Project Structure
 
-## Suggested Viva Points
+```text
+.
+├── README.md
+├── PROJECT_REPORT.md
+├── build.bat / build.sh
+├── run.bat / run.sh
+├── test.bat / test.sh
+├── docs/
+│   └── CLASS_DIAGRAM.md
+├── src/com/sportbooking/
+│   ├── app/
+│   ├── exception/
+│   ├── model/
+│   ├── payment/
+│   ├── service/
+│   └── util/
+└── test/com/sportbooking/
+    └── ProjectSelfTest.java
+```
 
-- `SportsFacility` is abstract because every facility shares common data, but a Court and Turf have different details.
-- Runtime polymorphism is visible when a `List<SportsFacility>` stores both `Court` and `Turf` objects and Java calls the overridden methods.
-- `PaymentMethod` demonstrates an interface and allows payment types to be swapped without changing `BookingService`.
-- `BookingService` separates business rules from the console UI, which improves maintainability.
-- Encapsulation prevents invalid direct changes to important fields such as rates, phone numbers, and booking state.
-- Slot overlap logic prevents double-booking of the same facility.
+## Viva Short Notes
+
+**Why is `SportsFacility` abstract?** Courts and turfs share identity, location, pricing, status, sports, and operating hours, but their specific details and extra charges differ.
+
+**Where is runtime polymorphism?** `BookingService` stores both `Court` and `Turf` as `SportsFacility`. Java calls the overridden surcharge/details methods based on the actual runtime object.
+
+**Why use `PaymentMethod` interface?** Booking logic depends on a payment contract rather than a specific Cash/UPI/Card class, so new payment types can be added without rewriting booking logic.
+
+**How is double booking prevented?** Before confirming a booking, the service checks all non-cancelled bookings for the same facility/date and rejects overlapping time ranges.
+
+**Where is file handling used?** Application state is serialized to disk, booking reports are exported as CSV, and individual receipts are generated as text files.
 
 ## Future Enhancements
 
-Possible extensions include a Swing/JavaFX GUI, database persistence, login/authentication, online payment gateway integration, email/SMS confirmation, and dynamic pricing.
+- JavaFX or Swing GUI
+- MySQL/PostgreSQL persistence using JDBC
+- User authentication with hashed passwords
+- Online payment gateway integration
+- Email/SMS notifications
+- QR-based booking check-in
+- Dynamic pricing and coupons
+- REST API / web frontend
 
 ## Academic Note
 
-This project is designed as an educational OOP mini project. Payment handling is simulated and no real payment is processed.
+This repository is an educational mini project. Payment processing is simulated and the admin PIN is intentionally simple for demonstration purposes.

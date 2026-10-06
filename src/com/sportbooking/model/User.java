@@ -1,6 +1,10 @@
 package com.sportbooking.model;
 
-public abstract class User {
+import java.io.Serializable;
+
+public abstract class User implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private final String id;
     private String name;
     private String email;
@@ -31,10 +35,10 @@ public abstract class User {
 
     public final void setEmail(String email) {
         String value = requireText(email, "Email");
-        if (!value.contains("@")) {
-            throw new IllegalArgumentException("Email must contain @.");
+        if (!value.matches("^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$")) {
+            throw new IllegalArgumentException("Enter a valid email address.");
         }
-        this.email = value;
+        this.email = value.toLowerCase();
     }
 
     public String getPhone() {
@@ -60,11 +64,6 @@ public abstract class User {
 
     @Override
     public String toString() {
-        return getRole() + "{" +
-                "id='" + id + '\'' +
-                ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
-                ", phone='" + phone + '\'' +
-                '}';
+        return String.format("%s | %s | %s | %s | %s", id, getRole(), name, email, phone);
     }
 }
