@@ -70,7 +70,7 @@ public final class ReportExporter {
     }
 
     private static String csv(String value) {
-        String safe = value == null ? "" : value.replace(""", """");
-        return """ + safe + """;
+        String safe = value == null ? "" : value.replace("\"", "\"\"");
+        return "\"" + safe + "\"";
     }
 }
